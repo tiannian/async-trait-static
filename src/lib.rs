@@ -1,4 +1,5 @@
 mod expand;
+mod has_self;
 mod parse;
 
 use expand::expand;
@@ -10,5 +11,6 @@ use syn::parse_macro_input;
 pub fn async_trait(_arg: TokenStream, input: TokenStream) -> TokenStream {
     let mut item = parse_macro_input!(input as Item);
     let tk = expand(&mut item);
+    println!("{}", tk);
     TokenStream::from(tk)
 }
