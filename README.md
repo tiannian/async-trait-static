@@ -2,7 +2,7 @@
 
 Features like `async-trait`, avoid using `Box` and `dyn`.
 
-This crate is ready for `#![no_std]` when [PR68524](https://github.com/rust-lang/rust/pull/68524) merged.
+This crate is ready for `#![no_std]` when [PR69033](https://github.com/rust-lang/rust/pull/69033) merged.
 
 ## Features
 - [X] basic function `async fn` for trait.
