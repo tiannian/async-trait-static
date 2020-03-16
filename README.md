@@ -11,7 +11,12 @@ This crate is ready for `#![no_std]` when [PR68524](https://github.com/rust-lang
 
 ## Usage
 
+Please enable feature `type_alias_impl_trait`;
+
 ```rust
+#![no_std]
+#![feature(type_alias_impl_trait)]
+
 use async_trait_static::async_trait;
 
 async fn hello() -> u8 {
