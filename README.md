@@ -16,7 +16,8 @@ WARNING: This crate use some unstable even incomplete feature.
 ## Works
 - [X] Need define lifetime for `self`.
 - [ ] Find a way to process default implementations in trait.
-  - [] Error: `type parameter Self is part of concrete type but not used in parameter list for the impl Trait type alias`
+  - [X] Don't define `type alias` as `associated type`.
+  - [ ] Error: `type parameter Self is part of concrete type but not used in parameter list for the impl Trait type alias`
 - [ ] Write code.
 
 ## Usage
