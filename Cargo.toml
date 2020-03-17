@@ -15,6 +15,10 @@ syn = { version = "1.0", features = ["full", "visit-mut", "extra-traits", "parsi
 quote = "1.0"
 proc-macro2 = "1.0"
 
+[dev-dependencies.async-std]
+version = "1.0.0"
+features = ["attributes"]
+
 [lib]
 proc-macro = true
 
