@@ -8,7 +8,7 @@ Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code
 
 ## Features
 - [X] basic function `async fn` for trait.
-- [ ] support default Implementations.
+- [ ] support default implementations in trait.
 - [ ] test more feature support.
 
 ## Usage
