@@ -11,6 +11,10 @@ Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code
 - [ ] support default implementations in trait.
 - [ ] test more feature support.
 
+## Workd
+- [ ] Find a new way to process 
+- [ ] Need define lifetime for `self`.
+
 ## Usage
 
 Please enable feature `type_alias_impl_trait`;

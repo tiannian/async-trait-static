@@ -3,10 +3,11 @@ use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::parse_quote;
 use syn::{
-    Block, Ident, ImplItem, ImplItemType, ItemType, ReturnType, Signature, TraitItem, TraitItemType,
+    Block, GenericParam, Ident, ImplItem, ImplItemType, ItemType, ReturnType, Signature, TraitItem,
+    TraitItemType,
 };
 
-fn get_async_block(_sig: &Signature, block: &Block) -> Block {
+fn get_async_block(_sig: &Signature, block: &mut Block) -> Block {
     let t: Block = parse_quote! {
         {
             async move #block
@@ -44,6 +45,8 @@ fn generate_signature_for_trait(sig: &mut Signature) -> TraitItemType {
             tit
         }
     };
+    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
+    sig.generics.params.push(async_trait_lifetime);
     let new_output: ReturnType = parse_quote!(-> Self::#camel_name);
     sig.output = new_output;
     true_type
@@ -67,6 +70,8 @@ fn generate_signature_for_impl(sig: &mut Signature) -> ImplItemType {
             tit
         }
     };
+    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
+    sig.generics.params.push(async_trait_lifetime);
     let new_output: ReturnType = parse_quote!(-> Self::#camel_name);
     sig.output = new_output;
     true_type
@@ -90,10 +95,13 @@ fn generate_signature_for_default(trait_prefix: &String, sig: &mut Signature) ->
             tit
         }
     };
+    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
+    sig.generics.params.push(async_trait_lifetime);
     let new_output: ReturnType = parse_quote!(-> #camel_name);
     sig.output = new_output;
     true_type
 }
+
 pub fn expand(input: &mut Item) -> TokenStream {
     let mut type_alias_sum = Vec::new();
     match input {
@@ -103,14 +111,17 @@ pub fn expand(input: &mut Item) -> TokenStream {
                 if let TraitItem::Method(method) = inner {
                     let sig = &mut method.sig;
                     if sig.asyncness.is_some() && method.default.is_none() {
+                        // for method declare.
                         let associated_type = generate_signature_for_trait(sig);
                         sig.asyncness = None;
                         associated_types.push(TraitItem::Type(associated_type));
-                        // TODO: Deal body?
                     }
                     if sig.asyncness.is_some() && method.default.is_some() {
-                        let block = &method.default;
-                        method.default = Some(get_async_block(sig, block.as_ref().unwrap()));
+                        // for default implementation.
+                        let block = &mut method.default;
+                        if let Some(b) = block {
+                            method.default = Some(get_async_block(sig, b));
+                        }
                         let type_alias =
                             generate_signature_for_default(&input.ident.to_string(), sig);
                         type_alias_sum.push(type_alias);
@@ -125,7 +136,7 @@ pub fn expand(input: &mut Item) -> TokenStream {
             for inner in &mut input.items {
                 if let ImplItem::Method(method) = inner {
                     let sig = &mut method.sig;
-                    method.block = get_async_block(sig, &method.block);
+                    method.block = get_async_block(sig, &mut method.block);
                     let associated_type = generate_signature_for_impl(sig);
                     sig.asyncness = None;
                     associated_types.push(ImplItem::Type(associated_type));
@@ -136,8 +147,8 @@ pub fn expand(input: &mut Item) -> TokenStream {
         }
     }
     quote! {
-        #input
-
         #( #type_alias_sum )*
+
+        #input
     }
 }

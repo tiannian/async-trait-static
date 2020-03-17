@@ -1,6 +1,6 @@
 mod expand;
-mod has_self;
 mod parse;
+mod receiver;
 
 use expand::expand;
 use parse::Item;
