@@ -9,8 +9,8 @@ use syn::{
 fn get_async_block(_sig: &Signature, block: &Block) -> Block {
     let t: Block = parse_quote! {
         {
-            let f = async move || #block;
-            f()
+            async move #block
+            // f()
         }
     };
     t
