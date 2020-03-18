@@ -1,6 +1,5 @@
 use crate::Item;
 use quote::format_ident;
-use std::compile_error;
 use syn::parse_quote;
 use syn::{parse::Parse, Block, ImplItem, ReturnType, Signature, TraitItem};
 
