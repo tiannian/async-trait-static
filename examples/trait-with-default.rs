@@ -1,4 +1,6 @@
 #![feature(type_alias_impl_trait)]
+#![feature(generic_associated_types)]
+
 use async_trait_static::async_trait;
 
 async fn hello() -> u8 {

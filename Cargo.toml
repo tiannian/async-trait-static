@@ -1,6 +1,6 @@
 [package]
 name = "async-trait-static"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["tiannian <dtiannian@aliyun.com>"]
 edition = "2018"
 description = "async fn in trait for no_std"

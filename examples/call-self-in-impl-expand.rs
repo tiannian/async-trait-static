@@ -25,10 +25,7 @@ impl MyTrait for TraitStruct {
     type FutureReturnTypeTestFn<'a> = impl core::future::Future<Output = u8>;
 
     fn test_fn(&self) -> Self::FutureReturnTypeTestFn<'_> {
-        async fn _inner(_self: &TraitStruct) -> u8 {
-            _self.hello().await
-        }
-        _inner(self)
+        async move { self.hello().await }
     }
 }
 

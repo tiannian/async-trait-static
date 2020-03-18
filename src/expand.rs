@@ -1,21 +1,8 @@
 use crate::Item;
-use proc_macro2::{Span, TokenStream};
-use quote::quote;
+use quote::format_ident;
+use std::compile_error;
 use syn::parse_quote;
-use syn::{
-    Block, GenericParam, Ident, ImplItem, ImplItemType, ItemType, ReturnType, Signature, TraitItem,
-    TraitItemType,
-};
-
-fn get_async_block(_sig: &Signature, block: &mut Block) -> Block {
-    let t: Block = parse_quote! {
-        {
-            async move #block
-            // f()
-        }
-    };
-    t
-}
+use syn::{parse::Parse, Block, ImplItem, ReturnType, Signature, TraitItem};
 
 fn underline2camel(ident: &String) -> String {
     let v = ident.split('_');
@@ -27,105 +14,75 @@ fn underline2camel(ident: &String) -> String {
     r
 }
 
-fn generate_signature_for_trait(sig: &mut Signature) -> TraitItemType {
-    // generate associated type
-    let name = &sig.ident.to_string();
-    let camel_name = Ident::new(&underline2camel(&name.to_string()), Span::call_site());
-    let true_type = match &sig.output {
+fn process_signature<T: Parse>(sig: &mut Signature, is_impl: bool) -> T {
+    let origin_name = sig.ident.to_string();
+    let camel_name = underline2camel(&origin_name);
+    // modify name.
+    let associated_type_name = format_ident!("ReturnType{}", camel_name);
+    let associated_type = match &sig.output {
         ReturnType::Default => {
-            let tit: TraitItemType = parse_quote! {
-                type #camel_name: core::future::Future<Output = ()>;
-            };
-            tit
+            if is_impl {
+                parse_quote! {
+                    type #associated_type_name<'a> = impl core::future::Future<Output = ()>;
+                }
+            } else {
+                parse_quote! {
+                    type #associated_type_name<'a>: core::future::Future<Output = ()>;
+                }
+            }
         }
+
         ReturnType::Type(_, t) => {
-            let tit: TraitItemType = parse_quote! {
-                type #camel_name: core::future::Future<Output = #t>;
-            };
-            tit
+            if is_impl {
+                parse_quote! {
+                    type #associated_type_name<'a>  = impl core::future::Future<Output = #t>;
+                }
+            } else {
+                parse_quote! {
+                    type #associated_type_name<'a>: core::future::Future<Output = #t>;
+                }
+            }
         }
     };
-    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
-    sig.generics.params.push(async_trait_lifetime);
-    let new_output: ReturnType = parse_quote!(-> Self::#camel_name);
-    sig.output = new_output;
-    true_type
-}
-
-fn generate_signature_for_impl(sig: &mut Signature) -> ImplItemType {
-    // generate associated type
-    let name = &sig.ident.to_string();
-    let camel_name = Ident::new(&underline2camel(&name.to_string()), Span::call_site());
-    let true_type = match &sig.output {
-        ReturnType::Default => {
-            let tit: ImplItemType = parse_quote! {
-                type #camel_name = impl core::future::Future<Output = ()>;
-            };
-            tit
-        }
-        ReturnType::Type(_, t) => {
-            let tit: ImplItemType = parse_quote! {
-                type #camel_name = impl core::future::Future<Output = #t>;
-            };
-            tit
-        }
+    sig.asyncness = None;
+    sig.output = parse_quote! {
+        -> Self::#associated_type_name<'_>
     };
-    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
-    sig.generics.params.push(async_trait_lifetime);
-    let new_output: ReturnType = parse_quote!(-> Self::#camel_name);
-    sig.output = new_output;
-    true_type
+    associated_type
 }
 
-fn generate_signature_for_default(trait_prefix: &String, sig: &mut Signature) -> ItemType {
-    // generate associated type
-    let name = sig.ident.to_string() + trait_prefix;
-    let camel_name = Ident::new(&underline2camel(&name.to_string()), Span::call_site());
-    let true_type = match &sig.output {
-        ReturnType::Default => {
-            let tit: ItemType = parse_quote! {
-                type #camel_name = impl core::future::Future<Output = ()>;
-            };
-            tit
+fn process_body_impl(block: &mut Block) {
+    *block = parse_quote! {
+        {
+            async move #block
         }
-        ReturnType::Type(_, t) => {
-            let tit: ItemType = parse_quote! {
-                type #camel_name = impl core::future::Future<Output = #t>;
-            };
-            tit
-        }
-    };
-    let async_trait_lifetime: GenericParam = parse_quote!('async_trait);
-    sig.generics.params.push(async_trait_lifetime);
-    let new_output: ReturnType = parse_quote!(-> #camel_name);
-    sig.output = new_output;
-    true_type
+    }
 }
 
-pub fn expand(input: &mut Item) -> TokenStream {
-    let mut type_alias_sum = Vec::new();
+fn process_trait_default(block: &mut Block) {
+    *block = parse_quote! {
+        {
+            compile_error!("Can't support trait method default implementation currently.");
+            async move #block
+        }
+    }
+}
+
+pub fn expand(input: &mut Item) {
     match input {
         Item::Trait(input) => {
             let mut associated_types = Vec::new();
             for inner in &mut input.items {
                 if let TraitItem::Method(method) = inner {
                     let sig = &mut method.sig;
-                    if sig.asyncness.is_some() && method.default.is_none() {
-                        // for method declare.
-                        let associated_type = generate_signature_for_trait(sig);
-                        sig.asyncness = None;
-                        associated_types.push(TraitItem::Type(associated_type));
-                    }
-                    if sig.asyncness.is_some() && method.default.is_some() {
-                        // for default implementation.
-                        let block = &mut method.default;
-                        if let Some(b) = block {
-                            method.default = Some(get_async_block(sig, b));
+                    if sig.asyncness.is_some() {
+                        // process signature
+                        let associated = process_signature::<TraitItem>(sig, false);
+                        associated_types.push(associated);
+                        if let Some(block) = &mut method.default {
+                            // is default implementation.
+                            process_trait_default(block);
                         }
-                        let type_alias =
-                            generate_signature_for_default(&input.ident.to_string(), sig);
-                        type_alias_sum.push(type_alias);
-                        sig.asyncness = None;
                     }
                 }
             }
@@ -136,19 +93,14 @@ pub fn expand(input: &mut Item) -> TokenStream {
             for inner in &mut input.items {
                 if let ImplItem::Method(method) = inner {
                     let sig = &mut method.sig;
-                    method.block = get_async_block(sig, &mut method.block);
-                    let associated_type = generate_signature_for_impl(sig);
-                    sig.asyncness = None;
-                    associated_types.push(ImplItem::Type(associated_type));
-                    // convert body.
+                    if sig.asyncness.is_some() {
+                        let associated = process_signature::<ImplItem>(sig, true);
+                        associated_types.push(associated);
+                        process_body_impl(&mut method.block);
+                    }
                 }
             }
             input.items.append(&mut associated_types);
         }
-    }
-    quote! {
-        #( #type_alias_sum )*
-
-        #input
     }
 }

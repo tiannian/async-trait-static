@@ -9,16 +9,15 @@ Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code
 WARNING: This crate use some unstable even incomplete feature. 
 
 ## Features
-- [X] basic function `async fn` for trait.
+- [X] define `async fn` in trait without default implementation.
 - [ ] support default implementations in trait.
 - [ ] test more feature support.
 
 ## Works
-- [X] Need define lifetime for `self`.
+- [X] Solve lifetime for `self`.
 - [ ] Find a way to process default implementations in trait.
   - [X] Don't define `type alias` as `associated type`.
   - [ ] Error: `type parameter Self is part of concrete type but not used in parameter list for the impl Trait type alias`
-- [ ] Write code.
 
 ## Usage
 
