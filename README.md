@@ -12,9 +12,9 @@ WARNING: This crate use some unstable even incomplete feature.
 
 - [ ] `Self`
   - [X] `Self` by reference.
-  - [ ] `Self` by value (In progress).
+  - [X] `Self` by value.
   - [X] `Self` by mut value.
-  - [ ] no `Self` (In progress).
+  - [X] no `Self`.
   - [ ] any type of `Self`.
 - [ ] Any number of arguments, any return value.
   - [ ] Arguments (Wait test).

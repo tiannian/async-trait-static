@@ -1,53 +1,13 @@
+use crate::selector::Selector;
 use crate::Item;
-use quote::format_ident;
 use syn::parse_quote;
-use syn::{parse::Parse, Block, ImplItem, ReturnType, Signature, TraitItem};
-
-fn underline2camel(ident: &String) -> String {
-    let v = ident.split('_');
-    let mut r = String::from("FutureReturnType");
-    for seg in v {
-        r.push_str(&seg[0..1].to_uppercase());
-        r.push_str(&seg[1..seg.len()]);
-    }
-    r
-}
+use syn::{parse::Parse, Block, ImplItem, Signature, TraitItem};
 
 fn process_signature<T: Parse>(sig: &mut Signature, is_impl: bool) -> T {
-    let origin_name = sig.ident.to_string();
-    let camel_name = underline2camel(&origin_name);
-    // modify name.
-    let associated_type_name = format_ident!("ReturnType{}", camel_name);
-    let associated_type = match &sig.output {
-        ReturnType::Default => {
-            if is_impl {
-                parse_quote! {
-                    type #associated_type_name<'a> = impl core::future::Future<Output = ()>;
-                }
-            } else {
-                parse_quote! {
-                    type #associated_type_name<'a>: core::future::Future<Output = ()>;
-                }
-            }
-        }
-
-        ReturnType::Type(_, t) => {
-            if is_impl {
-                parse_quote! {
-                    type #associated_type_name<'a>  = impl core::future::Future<Output = #t>;
-                }
-            } else {
-                parse_quote! {
-                    type #associated_type_name<'a>: core::future::Future<Output = #t>;
-                }
-            }
-        }
-    };
+    let stor = Selector::new(sig);
     sig.asyncness = None;
-    sig.output = parse_quote! {
-        -> Self::#associated_type_name<'_>
-    };
-    associated_type
+    sig.output = stor.return_type();
+    stor.associated_type(is_impl)
 }
 
 fn process_body_impl(block: &mut Block) {
