@@ -6,19 +6,23 @@ This crate is ready for `#![no_std]` when [PR69033](https://github.com/rust-lang
 
 Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code from these.
 
-WARNING: This crate use some unstable even incomplete feature. 
+WARNING: This crate use some unstable even incomplete feature.
 
 ## Features
 
 - [ ] `Self`
   - [X] `Self` by reference.
   - [X] `Self` by value.
-  - [X] `Self` by mut value.
+  - [X] `Self` by mut reference.
   - [X] no `Self`.
   - [ ] any type of `Self`.
 - [ ] Any number of arguments, any return value.
-  - [ ] Arguments (Wait test).
-  - [X] Return value.
+  - [ ] Arguments.
+    - [ ] As value.
+    - [ ] As reference.
+  - [ ] Return.
+    - [ ] Return value.
+    - [ ] Return reference.
 - [ ] Generic type parameters and lifetime parameters.
   - [ ] Generic arguments.
   - [ ] Generic Return.
@@ -27,6 +31,7 @@ WARNING: This crate use some unstable even incomplete feature.
 - [ ] support default implementations in trait.
 
 ## Works
+
 - [X] Solve lifetime for `self` reference.
 - [ ] Find a way to process default implementations in trait.
   - [X] Don't define `type alias` as `associated type`.
