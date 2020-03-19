@@ -2,6 +2,7 @@
 #![feature(generic_associated_types)]
 
 use async_trait_static::async_trait;
+use std::pin::Pin;
 
 async fn hello() -> u8 {
     println!("hello");
@@ -12,7 +13,7 @@ async fn hello() -> u8 {
 trait MyTrait {
     async fn test_fn(&self) -> u8;
 
-    async fn test_call(&self) -> u8;
+    async fn test_call(self: Pin<Self>) -> u8;
 }
 
 struct TraitStruct;
@@ -23,7 +24,7 @@ impl MyTrait for TraitStruct {
         hello().await
     }
 
-    async fn test_call(&self) -> u8 {
+    async fn test_call(self: Pin<Self>) -> u8 {
         self.test_fn().await
     }
 }

@@ -90,7 +90,7 @@ impl Selector {
 
     pub fn return_type(&self) -> ReturnType {
         match self {
-            Selector::GATLifetime { name, t: _ } => parse_quote! { -> Self::#name<'a> },
+            Selector::GATLifetime { name, t: _ } => parse_quote! { -> Self::#name<'_> },
             Selector::NoLifetime { name, t: _ } => parse_quote! { -> Self::#name },
             _ => parse_quote! { () },
         }

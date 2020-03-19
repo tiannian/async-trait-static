@@ -17,17 +17,22 @@ WARNING: This crate use some unstable even incomplete feature.
   - [X] no `Self`.
   - [ ] any type of `Self`.
 - [ ] Any number of arguments, any return value.
-  - [ ] Arguments (Wait test).
-  - [X] Return value.
+  - [X] Arguments.
+  - [X] Return value expect reference (return reference at `Lifetime return`).
+  - [ ] `impl trait` in arguments.
 - [ ] Generic type parameters and lifetime parameters.
   - [ ] Generic arguments.
-  - [ ] Generic Return.
+  - [ ] Generic return.
+  - [ ] Lifetime arguments.
+  - [ ] Lifetime return.
 - [ ] Associated types support.
 - [X] Having async and non-async functions in the same trait.
 - [ ] support default implementations in trait.
 
 ## Works
 - [X] Solve lifetime for `self` reference.
+- [ ] Rename name of future's GAT lifetime.
+- [ ] Parse any type of `Self`.
 - [ ] Find a way to process default implementations in trait.
   - [X] Don't define `type alias` as `associated type`.
   - [ ] Error: `type parameter Self is part of concrete type but not used in parameter list for the impl Trait type alias`
