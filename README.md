@@ -6,18 +6,20 @@ This crate is ready for `#![no_std]` when [PR69033](https://github.com/rust-lang
 
 Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code from these.
 
-WARNING: This crate use some unstable even incomplete feature. 
+WARNING: This crate use some unstable even incomplete feature.
 
 ## Features
 
 - [ ] `Self`
   - [X] `Self` by reference.
   - [X] `Self` by value.
-  - [X] `Self` by mut value.
+  - [X] `Self` by mut reference.
   - [X] no `Self`.
   - [ ] any type of `Self`.
 - [ ] Any number of arguments, any return value.
   - [X] Arguments.
+    - [X] As value.
+    - [X] As reference without lifetime.
   - [X] Return value expect reference (return reference at `Lifetime return`).
   - [ ] `impl trait` in arguments.
 - [ ] Generic type parameters and lifetime parameters.
@@ -30,6 +32,7 @@ WARNING: This crate use some unstable even incomplete feature.
 - [ ] support default implementations in trait.
 
 ## Works
+
 - [X] Solve lifetime for `self` reference.
 - [ ] Rename name of future's GAT lifetime.
 - [ ] Parse any type of `Self`.
