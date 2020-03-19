@@ -21,7 +21,7 @@ WARNING: This crate use some unstable even incomplete feature.
     - [X] As value.
     - [X] As reference without lifetime.
   - [X] Return value expect reference (return reference at `Lifetime return`).
-  - [ ] `impl trait` in arguments.
+  - [ ] `impl trait` in arguments (due to `type_alias_impl_trait` require all arguments must be concrete type.).
 - [ ] Generic type parameters and lifetime parameters.
   - [ ] Generic arguments.
   - [ ] Generic return.
@@ -38,7 +38,7 @@ WARNING: This crate use some unstable even incomplete feature.
 - [ ] Parse any type of `Self`.
 - [ ] Find a way to process default implementations in trait.
   - [X] Don't define `type alias` as `associated type`.
-  - [ ] Error: `type parameter Self is part of concrete type but not used in parameter list for the impl Trait type alias`
+  - [ ] Error: `type_alias_impl_trait` as `fn`'s return type require all arguments must be concrete type.
 
 ## Usage
 

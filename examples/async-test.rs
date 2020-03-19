@@ -7,6 +7,8 @@ async fn hello() -> u8 {
     1
 }
 
+trait Test {}
+
 #[async_trait]
 trait MyTrait {
     // Self by reference
@@ -15,7 +17,7 @@ trait MyTrait {
     // no async
     fn test_fn_no_async(&self) -> u8;
 
-    async fn test_fn_by_mut_reference<'a>(&mut self, s: &'a String) -> &'a String;
+    async fn test_fn_by_mut_reference(&mut self, s: impl Test);
 }
 
 struct TraitStruct;
@@ -30,9 +32,7 @@ impl MyTrait for TraitStruct {
         1
     }
 
-    async fn test_fn_by_mut_reference<'a>(&mut self, s: &'a String) -> &'a String {
-        s
-    }
+    async fn test_fn_by_mut_reference(&mut self, s: impl Test) {}
 }
 
 fn main() {
