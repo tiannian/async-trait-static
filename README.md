@@ -8,19 +8,23 @@ Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code
 
 WARNING: This crate use some unstable even incomplete feature.
 
+## Design
+
+Re-implementation a new `Future`.
+
 ## Features
 
 - [ ] `Self`
-  - [X] `Self` by reference.
-  - [X] `Self` by value.
-  - [X] `Self` by mut reference.
-  - [X] no `Self`.
+  - [ ] `Self` by reference.
+  - [ ] `Self` by value.
+  - [ ] `Self` by mut reference.
+  - [ ] no `Self`.
   - [ ] any type of `Self`.
 - [ ] Any number of arguments, any return value.
-  - [X] Arguments.
-    - [X] As value.
-    - [X] As reference without lifetime.
-  - [X] Return value expect reference (return reference at `Lifetime return`).
+  - [ ] Arguments.
+    - [ ] As value.
+    - [ ] As reference without lifetime.
+  - [ ] Return value expect reference (return reference at `Lifetime return`).
   - [ ] `impl trait` in arguments (due to `type_alias_impl_trait` require all arguments must be concrete type.).
 - [ ] Generic type parameters and lifetime parameters.
   - [ ] Generic arguments.
@@ -28,16 +32,16 @@ WARNING: This crate use some unstable even incomplete feature.
   - [ ] Lifetime arguments.
   - [ ] Lifetime return.
 - [ ] Associated types support.
-- [X] Having async and non-async functions in the same trait.
+- [ ] Having async and non-async functions in the same trait.
 - [ ] support default implementations in trait.
 
 ## Works
 
-- [X] Solve lifetime for `self` reference.
+- [ ] Solve lifetime for `self` reference.
 - [ ] Rename name of future's GAT lifetime.
 - [ ] Parse any type of `Self`.
 - [ ] Find a way to process default implementations in trait.
-  - [X] Don't define `type alias` as `associated type`.
+  - [ ] Don't define `type alias` as `associated type`.
   - [ ] Error: `type_alias_impl_trait` as `fn`'s return type require all arguments must be concrete type.
 
 ## Usage
