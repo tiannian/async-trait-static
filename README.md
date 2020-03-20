@@ -16,20 +16,20 @@ WARNING: This crate use some unstable even incomplete feature.
   - [X] `Self` by mut reference.
   - [X] no `Self`.
   - [ ] any type of `Self`.
-- [ ] Any number of arguments, any return value.
+- [X] Any number of arguments, any return value.
   - [X] Arguments.
     - [X] As value.
     - [X] As reference without lifetime.
   - [X] Return value expect reference (return reference at `Lifetime return`).
-  - [ ] `impl trait` in arguments (due to `type_alias_impl_trait` require all arguments must be concrete type.).
 - [ ] Generic type parameters and lifetime parameters.
   - [ ] Generic arguments.
   - [ ] Generic return.
   - [ ] Lifetime arguments.
   - [ ] Lifetime return.
+  - [ ] `impl trait` in arguments (due to `type_alias_impl_trait` require all arguments must be concrete type.).
 - [ ] Associated types support.
 - [X] Having async and non-async functions in the same trait.
-- [ ] support default implementations in trait.
+- [ ] support default `async fn` implementations in trait.
 
 ## Works
 

@@ -12,18 +12,23 @@ struct Eri {}
 
 impl Er for Eri {}
 
+#[warn(incomplete_features)]
 trait MyTrait {
+    type O;
+
     fn test_fn(&self, u: u8) -> Self::ReturnTypeFutureReturnTypeTestFn<'_>;
     fn test_fn_no_async(&self) -> u8;
     fn test_fn_by_mut_reference(
         &self,
-        s: impl Er,
+        s: Self::O,
     ) -> Self::ReturnTypeFutureReturnTypeTestFnByMutReference<'_>;
     type ReturnTypeFutureReturnTypeTestFn<'a>: core::future::Future<Output = u8>;
     type ReturnTypeFutureReturnTypeTestFnByMutReference<'a>: core::future::Future<Output = u8>;
 }
 struct TraitStruct;
 impl MyTrait for TraitStruct {
+    type O = u8;
+
     fn test_fn(&self, u: u8) -> Self::ReturnTypeFutureReturnTypeTestFn<'_> {
         async move { hello().await }
     }
@@ -32,13 +37,9 @@ impl MyTrait for TraitStruct {
     }
     fn test_fn_by_mut_reference(
         &self,
-        s: impl Er,
+        s: Self::O,
     ) -> Self::ReturnTypeFutureReturnTypeTestFnByMutReference<'_> {
-        // async move { self.test_fn(1).await }
-        async fn _inner<T: Er>(_self: &TraitStruct, e: T) -> u8 {
-            1
-        }
-        _inner(self, s)
+        async move { 1 }
     }
     type ReturnTypeFutureReturnTypeTestFn<'a> = impl core::future::Future<Output = u8>;
     type ReturnTypeFutureReturnTypeTestFnByMutReference<'a> =
