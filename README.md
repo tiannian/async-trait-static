@@ -30,7 +30,7 @@ WARNING: This crate use some unstable even incomplete feature. You will get some
 ## Incomplete Feature
 
 - [ ] support default `async fn` implementations in trait (Wait feature `generic_associated_types` support type arguments).
-- [ ] Generic type parameters and.
+- [ ] Generic type parameters.
   - [ ] Generic arguments (Wait for feature `generic_associated_types` support type arguments).
   - [ ] Generic return (Wait for feature `generic_associated_types` support type arguments).
   - [ ] `impl trait` in arguments (Wait for feature `generic_associated_types` support type arguments).
