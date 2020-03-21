@@ -5,7 +5,6 @@ use syn::{parse::Parse, parse_quote, FnArg, Ident, ReturnType, Signature, Type};
 pub enum Selector {
     GATLifetime { name: Ident, t: Type },
     NoLifetime { name: Ident, t: Type },
-    Unknown,
 }
 
 fn get_return_type(sig: &Signature) -> Type {
@@ -93,7 +92,6 @@ impl Selector {
         match self {
             Selector::GATLifetime { name, t } => gat_lifetime_associated_type(name, t, is_impl),
             Selector::NoLifetime { name, t } => no_lifetime_associated_type(name, t, is_impl),
-            _ => parse_quote! { () },
         }
     }
 
@@ -101,7 +99,6 @@ impl Selector {
         match self {
             Selector::GATLifetime { name, t: _ } => parse_quote! { -> Self::#name<'_> },
             Selector::NoLifetime { name, t: _ } => parse_quote! { -> Self::#name },
-            _ => parse_quote! { () },
         }
     }
 }
