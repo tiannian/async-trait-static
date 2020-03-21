@@ -10,26 +10,26 @@ WARNING: This crate use some unstable even incomplete feature.
 
 ## Features
 
-- [ ] `Self`
+- [X] `Self`
   - [X] `Self` by reference.
   - [X] `Self` by value.
   - [X] `Self` by mut reference.
   - [X] no `Self`.
-  - [ ] any type of `Self`.
+  - [X] any type of `Self`.
 - [X] Any number of arguments, any return value.
   - [X] Arguments.
     - [X] As value.
     - [X] As reference without lifetime.
   - [X] Return value expect reference (return reference at `Lifetime return`).
 - [ ] Generic type parameters and lifetime parameters.
-  - [ ] Generic arguments.
-  - [ ] Generic return.
+  - [ ] Generic arguments (Wait feature `generic_associated_types` support type arguments).
+  - [ ] Generic return (Wait feature `generic_associated_types` support type arguments).
   - [ ] Lifetime arguments.
   - [ ] Lifetime return.
-  - [ ] `impl trait` in arguments (due to `type_alias_impl_trait` require all arguments must be concrete type.).
-- [ ] Associated types support.
+  - [ ] `impl trait` in arguments (Wait feature `generic_associated_types` support type arguments).
+- [X] Associated types support.
 - [X] Having async and non-async functions in the same trait.
-- [ ] support default `async fn` implementations in trait.
+- [ ] support default `async fn` implementations in trait (Wait feature `generic_associated_types` support type arguments).
 
 ## Works
 
@@ -37,8 +37,7 @@ WARNING: This crate use some unstable even incomplete feature.
 - [ ] Rename name of future's GAT lifetime.
 - [ ] Parse any type of `Self`.
 - [ ] Find a way to process default implementations in trait.
-  - [X] Don't define `type alias` as `associated type`.
-  - [ ] Error: `type_alias_impl_trait` as `fn`'s return type require all arguments must be concrete type.
+  - [ ] Wait feature `generic_associated_types` support type arguments.
 
 ## Usage
 

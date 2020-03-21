@@ -70,7 +70,16 @@ impl Selector {
                         t: get_return_type(sig),
                     },
                 },
-                _ => Selector::Unknown,
+                FnArg::Typed(v) => match *v.ty {
+                    Type::Reference(_) => Selector::GATLifetime {
+                        name: get_camel_name_from_underline(&sig.ident),
+                        t: get_return_type(sig),
+                    },
+                    _ => Selector::GATLifetime {
+                        name: get_camel_name_from_underline(&sig.ident),
+                        t: get_return_type(sig),
+                    },
+                },
             }
         } else {
             Selector::NoLifetime {
