@@ -6,7 +6,7 @@ This crate is ready for `#![no_std]` when [PR69033](https://github.com/rust-lang
 
 Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code from these.
 
-WARNING: This crate use some unstable even incomplete feature.
+WARNING: This crate use some unstable even incomplete feature. You will get some warning from compiler.
 
 ## Features
 
@@ -21,23 +21,21 @@ WARNING: This crate use some unstable even incomplete feature.
     - [X] As value.
     - [X] As reference without lifetime.
   - [X] Return value expect reference (return reference at `Lifetime return`).
-- [ ] Generic type parameters and lifetime parameters.
-  - [ ] Generic arguments (Wait feature `generic_associated_types` support type arguments).
-  - [ ] Generic return (Wait feature `generic_associated_types` support type arguments).
-  - [ ] Lifetime arguments.
-  - [ ] Lifetime return.
-  - [ ] `impl trait` in arguments (Wait feature `generic_associated_types` support type arguments).
+- [X] Lifetime parameters.
+  - [X] Lifetime arguments.
+  - [X] Lifetime return.
 - [X] Associated types support.
 - [X] Having async and non-async functions in the same trait.
+
+## Incomplete Feature
+
 - [ ] support default `async fn` implementations in trait (Wait feature `generic_associated_types` support type arguments).
+- [ ] Generic type parameters and.
+  - [ ] Generic arguments (Wait for feature `generic_associated_types` support type arguments).
+  - [ ] Generic return (Wait for feature `generic_associated_types` support type arguments).
+  - [ ] `impl trait` in arguments (Wait for feature `generic_associated_types` support type arguments).
 
-## Works
-
-- [X] Solve lifetime for `self` reference.
-- [ ] Rename name of future's GAT lifetime.
-- [ ] Parse any type of `Self`.
-- [ ] Find a way to process default implementations in trait.
-  - [ ] Wait feature `generic_associated_types` support type arguments.
+These feature all require `generic_associated_types` support type arguments.
 
 ## Usage
 

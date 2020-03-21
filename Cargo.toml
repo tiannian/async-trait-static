@@ -1,6 +1,6 @@
 [package]
 name = "async-trait-static"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["tiannian <dtiannian@aliyun.com>"]
 edition = "2018"
 description = "async fn in trait for no_std"
@@ -14,10 +14,6 @@ repository = "https://github.com/tiannian/async-trait-static"
 syn = { version = "1.0", features = ["full", "visit-mut", "extra-traits", "parsing"] }
 quote = "1.0"
 proc-macro2 = "1.0"
-
-[dev-dependencies.async-std]
-version = "1.0.0"
-features = ["attributes"]
 
 [lib]
 proc-macro = true
