@@ -23,7 +23,7 @@ WARNING: This crate use some unstable even incomplete feature. You will get some
   - [X] Return value expect reference (return reference at `Lifetime return`).
 - [X] Lifetime parameters.
   - [X] Lifetime arguments.
-  - [X] Lifetime return.
+  - [ ] Lifetime return.
 - [X] Associated types support.
 - [X] Having async and non-async functions in the same trait.
 

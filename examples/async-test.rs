@@ -22,8 +22,8 @@ struct TraitStruct;
 
 #[async_trait]
 impl MyTrait for TraitStruct {
-    async fn test_fn<'a>(&self, u: &'a u8) -> u8 {
-        hello().await
+    async fn test_fn<'a>(&self, u: &'a u8) -> &'a u8 {
+        u
     }
 
     fn test_fn_no_async(&self) -> u8 {
