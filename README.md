@@ -2,7 +2,7 @@
 
 Features like `async-trait`, avoid using `Box` and `dyn`.
 
-This crate is ready for `#![no_std]` when [PR69033](https://github.com/rust-lang/rust/pull/69033) merged.
+This crate is ready for `#![no_std]` require `ngihtly` later than `nightly-2020-04-06`.
 
 Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code from these.
 
