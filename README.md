@@ -27,9 +27,11 @@ WARNING: This crate use some unstable even incomplete feature. You will get some
 - [X] Associated types support.
 - [X] Having async and non-async functions in the same trait.
 
-## Incomplete Feature
+## Incomplete Feature (WIP)
 
 > These feature all require `generic_associated_types` support type arguments.
+
+> Now `generic_associated_types` support type arguments. (nightly-2020-12-03).
 
 Following issue: [#44265](https://github.com/rust-lang/rust/issues/44265)
 
