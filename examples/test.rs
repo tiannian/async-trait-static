@@ -4,6 +4,9 @@
 trait AsyncFnTrait {
     fn run<T>(&self, t: T) -> Self::ReturnTypeFutureReturnTypeRun<'_, T>;
     type ReturnTypeFutureReturnTypeRun<'a, T>: core::future::Future<Output = ()>;
+    
+    type ReturnTypeFutureReturnTypeRun1<'a>: core::future::Future<Output = ()>;
+    fn run1(&self) -> Self::ReturnTypeFutureReturnTypeRun1<'_>;
 }
 
 struct AsyncStruct;
@@ -17,6 +20,13 @@ impl AsyncFnTrait for AsyncStruct {
         async move  { self.hello().await; }
     }
     type ReturnTypeFutureReturnTypeRun<'a, T> = impl core::future::Future<Output = ()>;
+    type ReturnTypeFutureReturnTypeRun1<'a> = impl core::future::Future<Output = ()>;
+    
+    fn run1(&self) -> Self::ReturnTypeFutureReturnTypeRun1<'_> {
+        async move {
+            1;
+        }
+    }
 }
 
 fn main() {}
