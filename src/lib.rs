@@ -1,6 +1,6 @@
 mod async_trait;
-mod ritit;
 mod parse;
+mod ritit;
 // mod selector;
 
 use parse::Item;
@@ -21,11 +21,6 @@ pub fn async_trait(_arg: TokenStream, input: TokenStream) -> TokenStream {
 
 #[proc_macro_attribute]
 pub fn ritit(_arg: TokenStream, input: TokenStream) -> TokenStream {
-    let mut item = parse_macro_input!(input as Item);
-    ritit::expand(&mut item);
-    let tk = quote! {
-        #item
-    };
-    TokenStream::from(tk)
+    let item = parse_macro_input!(input as Item);
+    ritit::expand(item)
 }
-

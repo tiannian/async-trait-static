@@ -1,16 +1,18 @@
-// use crate::selector::Selector;
 use crate::Item;
 use syn::parse_quote;
-use syn::{parse::Parse, Block, ImplItem, Signature, TraitItem, TraitItemMethod, ReturnType, ImplItemMethod};
-use quote::ToTokens;
+use syn::{ImplItem, ImplItemMethod, ReturnType, TraitItem, TraitItemMethod};
 
 fn process_signature_return(return_type: &mut ReturnType) {
     match return_type {
-        ReturnType::Default => *return_type = parse_quote! {
-            -> impl core::future::Future<Output = ()>
-        },
-        ReturnType::Type(_rarrow, ty) => *return_type = parse_quote! {
-            -> impl core::future::Future<Output = #ty>
+        ReturnType::Default => {
+            *return_type = parse_quote! {
+                -> impl core::future::Future<Output = ()>
+            }
+        }
+        ReturnType::Type(_rarrow, ty) => {
+            *return_type = parse_quote! {
+                -> impl core::future::Future<Output = #ty>
+            }
         }
     }
 }
@@ -44,7 +46,7 @@ pub fn expand(input: &mut Item) {
             for item in &mut input.items {
                 match item {
                     TraitItem::Method(method) => process_trait_method(method),
-                    _ => ()
+                    _ => (),
                 };
             }
         }
@@ -52,7 +54,7 @@ pub fn expand(input: &mut Item) {
             for item in &mut input.items {
                 match item {
                     ImplItem::Method(method) => process_impl_method(method),
-                    _ => ()
+                    _ => (),
                 }
             }
         }

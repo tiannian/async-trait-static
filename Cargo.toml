@@ -14,6 +14,7 @@ repository = "https://github.com/tiannian/async-trait-static"
 syn = { version = "1.0", features = ["full", "visit-mut", "extra-traits", "parsing"] }
 quote = "1.0"
 proc-macro2 = "1.0"
+convert_case = "0.4.0"
 
 [lib]
 proc-macro = true
