@@ -8,6 +8,10 @@ use async_trait_static::async_trait;
 #[async_trait]
 trait AsyncFnTrait {
     async fn run(&self);
+
+    async fn deff(&self) -> u8 {
+        1
+    }
 }
 
 struct AsyncStruct;

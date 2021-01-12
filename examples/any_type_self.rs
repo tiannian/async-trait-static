@@ -3,8 +3,8 @@
 #![feature(type_alias_impl_trait)]
 #![feature(generic_associated_types)]
 
-use std::boxed::Box;
 use async_trait_static::async_trait;
+use std::boxed::Box;
 
 #[async_trait]
 trait AsyncFnTrait {
