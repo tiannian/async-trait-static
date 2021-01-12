@@ -23,17 +23,17 @@ This crate support `async` in trait through `#[async_trait]` and sup
   - [X] `Self` by value.
   - [X] `Self` by mut reference.
   - [X] no `Self`.
-  - [ ] any type of `Self`. (need test).
-  - [ ] `Self` by mut value. (It seems unuse).
+  - [ ] any type of `Self`. (need test)
+  - [ ] `Self` by mut value. (It seems unuse)
 - [X] Any number of arguments, any return value.
   - [X] Arguments.
     - [X] As value.
     - [X] As reference without lifetime.
-  - [ ] Return value expect reference (return reference at `Lifetime return`). (need test).
-- [ ] Lifetime parameters. (need test).
+  - [ ] Return value expect reference (return reference at `Lifetime return`). (need test)
+- [ ] Lifetime parameters. (need test)
   - [ ] Lifetime arguments.
   - [ ] Lifetime return.
-- [ ] Associated types support. (need test).
+- [ ] Associated types support. (need test)
 - [X] Having async and non-async functions in the same trait.
 - [X] support default `async fn` implementations in trait.
 - [X] Generic type parameters.
