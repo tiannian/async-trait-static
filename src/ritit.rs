@@ -7,7 +7,7 @@ use convert_case::{Case, Casing};
 use proc_macro2::Span;
 use syn::{
     parse_quote, FnArg, GenericParam, Ident, ImplItem, ItemImpl, ItemTrait, ReturnType, Signature,
-    Token, TraitItem, TraitItemType, Type, TypeParamBound,
+    Token, TraitItem, TraitItemType, Type, TypeParamBound, Stmt
 };
 
 fn get_return_bounds(return_type: &ReturnType) -> Option<Punctuated<TypeParamBound, Token![+]>> {
@@ -53,6 +53,7 @@ fn modify_receiver(sig: &mut Signature) {
 fn process_trait(mut input: ItemTrait) -> TokenStream {
     let mut asses = Vec::new();
     let mut funcs = Vec::new();
+    let mut stmts = Vec::new();
     for item in &mut input.items {
         if let TraitItem::Method(method) = item {
             if let Some(bounds) = get_return_bounds(&method.sig.output) {
@@ -65,20 +66,32 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
                 modify_receiver(&mut method.sig);
 
                 let mut func = method.clone();
-                func.sig.output = parse_quote!(-> Self::#type_name<'_async_lifetime, #generics>);
-                let async_lifetime: GenericParam = parse_quote!('_async_lifetime);
-                func.sig.generics.params.insert(0, async_lifetime);
-                funcs.push(TraitItem::Method(func));
 
                 let associated_type: TraitItemType = parse_quote! {
                     type #type_name<'_async_lifetime, #generics>: #bounds;
                 };
 
-                if let Some(block) = &method.default {
+                if let Some(_) = &method.default {
+                    // func.generics.where_clause
+                    if func.sig.generics.where_clause.is_none() {
+                        func.sig.generics.where_clause = parse_quote!(where Self: Sized);
+                    } else {
+                        // let predicates = func.sig.generics.where_clause.a.unwrap()
+                        func.sig.generics.where_clause.as_mut().unwrap().predicates.push(parse_quote!(Self: Sized));
+                    }
+                    let stmt: Stmt = parse_quote!(type #type_name<'_async_lifetime, RititS, #generics> = impl #bounds;);
+                    stmts.push(stmt);
+                    func.sig.output = parse_quote!(-> #type_name<'_async_lifetime, Self, #generics>);
 
+                } else {
+                    func.sig.output = parse_quote!(-> Self::#type_name<'_async_lifetime, #generics>);
+                    asses.push(TraitItem::Type(associated_type));
                 }
+                
+                let async_lifetime: GenericParam = parse_quote!('_async_lifetime);
+                func.sig.generics.params.insert(0, async_lifetime);
+                funcs.push(TraitItem::Method(func));
 
-                asses.push(TraitItem::Type(associated_type));
             }
         }
     }
@@ -88,6 +101,7 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
     input.items = asses;
 
     let tk = quote! {
+        #(#stmts)*
         #input
     };
     TokenStream::from(tk)
