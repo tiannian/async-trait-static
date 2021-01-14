@@ -9,7 +9,7 @@ use async_trait_static::ritit;
 trait AsyncFnTrait {
     fn run<T: Clone>(&self, t: T) -> impl core::future::Future<Output = ()>;
     fn deff(&self) -> impl core::future::Future<Output = u8> {
-        async move  { 1 }
+        async move { 1 }
     }
 }
 

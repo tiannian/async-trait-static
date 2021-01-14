@@ -7,7 +7,7 @@ use convert_case::{Case, Casing};
 use proc_macro2::Span;
 use syn::{
     parse_quote, FnArg, GenericParam, Ident, ImplItem, ItemImpl, ItemTrait, ReturnType, Signature,
-    Token, TraitItem, TraitItemType, Type, TypeParamBound, Stmt
+    Stmt, Token, TraitItem, TraitItemType, Type, TypeParamBound, WhereClause, WherePredicate
 };
 
 fn get_return_bounds(return_type: &ReturnType) -> Option<Punctuated<TypeParamBound, Token![+]>> {
@@ -75,17 +75,36 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
                     if func.sig.generics.where_clause.is_none() {
                         func.sig.generics.where_clause = parse_quote!(where Self: Sized);
                     } else {
-                        func.sig.generics.where_clause.as_mut().unwrap().predicates.push(parse_quote!(Self: Sized));
+                        func.sig
+                            .generics
+                            .where_clause
+                            .as_mut()
+                            .unwrap()
+                            .predicates
+                            .push(parse_quote!(Self: Sized));
                     }
                     let stmt: Stmt = parse_quote!(type #type_name<'_async_lifetime, RititS, #generics> = impl #bounds;);
                     stmts.push(stmt);
-                    func.sig.output = parse_quote!(-> #type_name<'_async_lifetime, Self, #generics>);
-
+                    func.sig.output =
+                        parse_quote!(-> #type_name<'_async_lifetime, Self, #generics>);
                 } else {
-                    func.sig.output = parse_quote!(-> Self::#type_name<'_async_lifetime, #generics>);
+                    func.sig.output =
+                        parse_quote!(-> Self::#type_name<'_async_lifetime, #generics>);
                     asses.push(TraitItem::Type(associated_type));
                 }
-                
+
+                if func.sig.generics.where_clause.is_none() {
+                    // add where.
+                    func.sig.generics.where_clause = Some(WhereClause {
+                        where_token: Token![where],
+                        predicates: Punctuated::<WherePredicate, Token![,]>::new(),
+                    })
+                }
+
+                // func.sig.generics.where_clause.push()
+
+                // add lifetime.
+
                 let async_lifetime: GenericParam = parse_quote!('_async_lifetime);
                 func.sig.generics.params.insert(0, async_lifetime);
                 funcs.push(TraitItem::Method(func));
@@ -149,7 +168,6 @@ fn process_impl(mut input: ItemImpl) -> TokenStream {
 }
 
 pub fn expand(input: Item) -> TokenStream {
-    
     match input {
         Item::Trait(i) => process_trait(i),
         Item::Impl(i) => process_impl(i),
