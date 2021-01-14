@@ -72,11 +72,9 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
                 };
 
                 if let Some(_) = &method.default {
-                    // func.generics.where_clause
                     if func.sig.generics.where_clause.is_none() {
                         func.sig.generics.where_clause = parse_quote!(where Self: Sized);
                     } else {
-                        // let predicates = func.sig.generics.where_clause.a.unwrap()
                         func.sig.generics.where_clause.as_mut().unwrap().predicates.push(parse_quote!(Self: Sized));
                     }
                     let stmt: Stmt = parse_quote!(type #type_name<'_async_lifetime, RititS, #generics> = impl #bounds;);

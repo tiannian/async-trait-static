@@ -7,11 +7,13 @@ use async_trait_static::async_trait;
 
 #[async_trait]
 trait AsyncFnTrait {
-    async fn run(&self);
+    async fn run(&self) -> &u8;
 
     async fn deff(&self) -> u8 {
         1
     }
+
+    // async fn ret_value(&self) -> &[u8];
 }
 
 struct AsyncStruct;
@@ -24,8 +26,9 @@ impl AsyncStruct {
 
 #[async_trait]
 impl AsyncFnTrait for AsyncStruct {
-    async fn run(&self) {
+    async fn run(&self) -> &u8 {
         self.hello().await;
+        &0
     }
 }
 

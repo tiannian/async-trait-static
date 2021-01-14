@@ -29,7 +29,7 @@ This crate support `async` in trait through `#[async_trait]` and sup
   - [X] Arguments.
     - [X] As value.
     - [X] As reference without lifetime.
-  - [ ] Return value expect reference (return reference at `Lifetime return`). (need test)
+  - [X] Return value expect reference (return reference at `Lifetime return`). (need test)
 - [ ] Lifetime parameters. (need test)
   - [ ] Lifetime arguments.
   - [ ] Lifetime return.

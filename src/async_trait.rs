@@ -1,6 +1,6 @@
 use crate::Item;
 use syn::parse_quote;
-use syn::{ImplItem, ImplItemMethod, ReturnType, TraitItem, TraitItemMethod};
+use syn::{ImplItem, ImplItemMethod, ReturnType, TraitItem, TraitItemMethod, Type};
 
 fn process_signature_return(return_type: &mut ReturnType) {
     match return_type {
@@ -10,8 +10,17 @@ fn process_signature_return(return_type: &mut ReturnType) {
             }
         }
         ReturnType::Type(_rarrow, ty) => {
-            *return_type = parse_quote! {
-                -> impl core::future::Future<Output = #ty>
+            if let Type::Reference(t) = &mut **ty {
+                if t.lifetime.is_none() {
+                    t.lifetime = Some(parse_quote!('_async_lifetime));
+                    *return_type = parse_quote! {
+                        -> impl core::future::Future<Output = #ty>
+                    }
+                } else {
+                    *return_type = parse_quote! {
+                        -> impl core::future::Future<Output = #ty>
+                    }
+                }
             }
         }
     }
