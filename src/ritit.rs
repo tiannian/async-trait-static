@@ -89,8 +89,9 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
                 let async_lifetime: GenericParam = parse_quote!('_async_lifetime);
                 func.sig.generics.params.insert(0, async_lifetime);
                 funcs.push(TraitItem::Method(func));
-
             }
+        } else {
+            asses.push(item.clone());
         }
     }
 
@@ -131,6 +132,8 @@ fn process_impl(mut input: ItemImpl) -> TokenStream {
                 };
                 asses.push(associated_type);
             }
+        } else {
+            asses.push(item.clone());
         }
     }
 
@@ -146,6 +149,7 @@ fn process_impl(mut input: ItemImpl) -> TokenStream {
 }
 
 pub fn expand(input: Item) -> TokenStream {
+    
     match input {
         Item::Trait(i) => process_trait(i),
         Item::Impl(i) => process_impl(i),
