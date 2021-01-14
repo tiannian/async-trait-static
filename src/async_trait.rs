@@ -16,10 +16,10 @@ fn process_signature_return(return_type: &mut ReturnType) {
                     *return_type = parse_quote! {
                         -> impl core::future::Future<Output = #ty>
                     }
-                } else {
-                    *return_type = parse_quote! {
-                        -> impl core::future::Future<Output = #ty>
-                    }
+                }
+            } else {
+                *return_type = parse_quote! {
+                    -> impl core::future::Future<Output = #ty>
                 }
             }
         }
