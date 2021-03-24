@@ -89,6 +89,8 @@ fn process_trait(mut input: ItemTrait) -> TokenStream {
                 let async_lifetime: GenericParam = parse_quote!('_async_lifetime);
                 func.sig.generics.params.insert(0, async_lifetime);
                 funcs.push(TraitItem::Method(func));
+            } else {
+                funcs.push(item.clone());
             }
         } else {
             asses.push(item.clone());
@@ -131,6 +133,8 @@ fn process_impl(mut input: ItemImpl) -> TokenStream {
                     type #type_name<'_async_lifetime, #generics> = impl #bounds;
                 };
                 asses.push(associated_type);
+            } else {
+                funcs.push(item.clone());
             }
         } else {
             asses.push(item.clone());
