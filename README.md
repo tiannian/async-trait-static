@@ -1,6 +1,6 @@
 # Async trait methods for `no_std`
 
-Features like `async-trait`, avoid using `Box` and `dyn`. You can use async keywork in trait without alloc.
+Features like `async-trait`, avoid using `Box` and `dyn`. You can use async keyword in trait without alloc.
 
 Thanks to crate [async-trait](https://github.com/dtolnay/async-trait), some code from these.
 
